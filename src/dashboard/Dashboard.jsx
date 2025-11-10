@@ -28,7 +28,9 @@ export const Dashboard = () => {
           </div>
 
           <nav className="mt-6 space-y-2">
-            <div className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer">
+            <div
+              onClick={() => navigate("/payment")}  
+            className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer">
               Dashboard
             </div>
             <div className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer">
