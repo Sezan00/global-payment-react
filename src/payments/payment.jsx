@@ -14,6 +14,27 @@ export const payment = () => {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             </div>
+            <div className='mb-4'>
+                 <label className="block text-gray-500 mb-1">Relation</label>
+                <select name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+                    <option value="">Relation</option>
+                    <option value="">Dad</option>
+                </select>
+            </div>
+            <div className='mb-4'>
+                 <label className="block text-gray-500 mb-1">Source of fund</label>
+                <select name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+                    <option value="">Source of fund</option>
+                    <option value="">Savings</option>
+                </select>
+            </div>
+            <div className='mb-4'>
+                 <label className="block text-gray-500 mb-1">Purpose of transfer</label>
+                <select name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+                    <option value="">Relation</option>
+                    <option value="">Salary</option>
+                </select>
+            </div>
             
             <div className="mb-4">
             <label className="block text-gray-500 mb-1">Card Number</label>
