@@ -1,6 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getPurposeTransfer, getRelations, getSourceFunds } from '../Api/relations';
 
 export const payment = () => {
+
+    const [relations, setRelations] = useState([]);
+    const [selectedRelation, setSelectedRelation] = useState("");
+    
+    const [sourceofunds, setSourceFunds] = useState([]);
+    const [selectedSourceOfFund, setSelectedSourceOfFund] = useState("");
+
+    const [purposeTransfer, setPurposeTransfer] = useState([]);
+    const [selectPurposeTransfer, setSelectPurposeTransfer] = useState("");
+
+    useEffect(()=>{
+        const fetchRelations = async()=>{
+            try{
+                const data = await getRelations();
+                // console.log("data result", data);
+                 setRelations(data);
+            } catch (err){
+                console.log(err);
+            }
+        };
+        fetchRelations();
+    }, []);
+
+    useEffect(() => {
+  const fetchSourceFunds = async () => {
+    try {
+      const data = await getSourceFunds();
+    //   console.log("Source of Fund Data:", data);
+      setSourceFunds(data);
+    } catch (err) {
+      console.error("Error fetching source funds:", err);
+    }
+  };
+
+  fetchSourceFunds();
+}, []);
+
+
+  useEffect(()=>{
+    const fetchPurposeTransfer = async()=>{
+        try{
+            const data = await getPurposeTransfer();
+            console.log("purpose of transfer:", data.data);
+             setPurposeTransfer(data.data ?? data ?? []);
+        } catch(err){
+            console.log("Error fetching error purpose of transfer:", err);
+        }   
+    };
+    fetchPurposeTransfer()
+  }, [])
+
   return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
         <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg">
@@ -16,23 +68,50 @@ export const payment = () => {
             </div>
             <div className='mb-4'>
                  <label className="block text-gray-500 mb-1">Relation</label>
-                <select name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
-                    <option value="">Relation</option>
-                    <option value="">Dad</option>
+                <select 
+                value={selectedRelation} 
+                onChange={(e)=>setSelectedRelation(e.target.value)} 
+                name="" 
+                id="" 
+                className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+                    <option value="">Selected Relation</option>
+                    {relations.map((relation)=>(
+                        <option className='text-black' key={relation.id} value={relation.id}>
+                            {relation.relation}
+                        </option>
+                    ))}
                 </select>
             </div>
             <div className='mb-4'>
                  <label className="block text-gray-500 mb-1">Source of fund</label>
-                <select name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+                <select 
+                value={selectedSourceOfFund}
+                onChange={(e)=>setSelectedSourceOfFund(e.target.value)} 
+                name="" 
+                id="" 
+                className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
                     <option value="">Source of fund</option>
-                    <option value="">Savings</option>
+                    {sourceofunds.map((sourceFund)=>(
+                        <option value={sourceFund.id} key={sourceFund.id}>
+                            {sourceFund.source_fund}
+                        </option>
+                    ))}
+                    
                 </select>
             </div>
             <div className='mb-4'>
                  <label className="block text-gray-500 mb-1">Purpose of transfer</label>
-                <select name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
-                    <option value="">Relation</option>
-                    <option value="">Salary</option>
+                <select 
+                value={selectPurposeTransfer}
+                onChange={(e)=>setSelectPurposeTransfer(e.target.value)}
+                name="" id="" className='w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400'>
+                    <option value="">Purpose of transfer</option>
+                    {purposeTransfer.map((purpose)=>(
+                      <option value={purpose.id} key={purpose.id}>
+                        {purpose.purpose_transfer}
+                        </option>
+                    ))}
+                   
                 </select>
             </div>
             
