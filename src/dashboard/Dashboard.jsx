@@ -8,6 +8,8 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = localStorage.getItem("user");
+  const Token = localStorage.getItem('token');
+  console.log(Token);
   console.log(userData);
     const user = userData ? JSON.parse(userData) : null;
   console.log(user);
@@ -34,7 +36,8 @@ export const Dashboard = () => {
             </div>
             <div 
             onClick={() => navigate("/payment")} 
-            className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer">
+            className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer"
+            >
               Payments
             </div>
             <div className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer">
@@ -54,8 +57,16 @@ export const Dashboard = () => {
           User Payment Dashboard
         </h1>
 
+        <div className='flex justify-end'>
+          <button
+            onClick={()=>navigate("/currencyselet")}
+          className='px-2 py-2 bg-green-800 text-white font-bold rounded-md hover:bg-green-500 duration-200  cursor-pointer'>
+            Payment
+            </button>
+        </div>
+
         {/* Balance Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
             <p className="text-sm text-gray-500">Total Balance</p>
             <h2 className="text-2xl font-bold text-green-600 mt-2">$2,500.00</h2>

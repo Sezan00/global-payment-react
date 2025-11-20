@@ -4,13 +4,16 @@ import Dashboard from './dashboard/Dashboard'
 import SignUp from "./Auth/SignUp";
 import Login from "./Auth/Login";
 import  Payment  from "./payments/payment";
+import CurrencySelect  from "./payments/CurrencySelect";
+
 function App() {
   return (
     <Routes>
       <Route path="/dashboard/:name" element={<Dashboard />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="login" element={<Login/>}/>
-      <Route path="/payment" element={<Payment/>}/>
+      <Route path="/payment" element={<Payment/>}/> 
+      <Route path="/currencyselet" element={<CurrencySelect/>}/>
     </Routes>
   )
 }

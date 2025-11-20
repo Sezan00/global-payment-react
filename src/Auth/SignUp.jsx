@@ -13,7 +13,7 @@ const SignUp = () => {
   });
 
   useEffect(()=>{
-    axios.get("http://localhost:8000/api/countries-with-currencies")
+    axios.get("http://localhost:8000/api/country")
          .then((res)=>setContries(res.data))
          .catch((err)=> console.log(err));
   }, []);
