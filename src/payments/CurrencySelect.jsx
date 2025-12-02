@@ -5,48 +5,44 @@ export default function CurrencyAmount() {
   const [countries, setCountries] = useState([]);
   const [senderCurrency, setSenderCurrency] = useState([]); 
   const [receiverCountry, setReceiverCountry] = useState("");
+  const [receiverCurrencies, setReceiverCurrencies] = useState([]);
+
+  //change rate state
   const [amount, setAmount] = useState("");
- const [receiverCurrencies, setReceiverCurrencies] = useState([]);
-  // this useEffect for fetch currecies 
-  useEffect(()=>{
-    const fetchCurrencies = async ()=>{
-      try{
-        const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8000/api/user/sendercurrencies", {
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setSenderCurrency(response.data);
-      } catch(err){
-        console.log('Error Fetching currencies', err)
-      }
+  const [source, setSource] = useState("");
+  const [target, setTarget] = useState("");
+  const [rate, setRate] = useState(null);
+  const [error, setError] = useState("");
+
+  const [sender, setSender] = useState([]);
+  const [receiver, setReceiver] = useState([]);
+
+  const getGetAvailableSource = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get('http://localhost:8000/api/available-countries', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log(response.data);
+
+      setSender(response.data.sender ?? []);
+      setReceiver(response.data.receiver ?? []);
+      
+    } catch (error) {
+      console.log(error);     
     }
-    fetchCurrencies();
+  }
+
+  useEffect(() => {
+    getGetAvailableSource();
   }, []);
 
-  //this UseEffect fetch of Fetch Receiver Country 
+
+  // Fetch currencies when country changes
   useEffect(()=>{
-     const fetchCountries = async ()=>{
-      const token = localStorage.getItem('token');
-      try{
-        const res = await axios.get("http://localhost:8000/api/receiver/countries", {
-            headers:{
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setCountries(res.data);
-        // console.log('Receiver Country', res.data);
-      } catch(err){
-          console.log("Error fetch country", err)
-      }
-     };
-     fetchCountries();
-  }, []);
-
-   // Fetch currencies when country changes
-
-   useEffect(()=>{
 
     if(!receiverCountry) return;
 
@@ -69,26 +65,105 @@ export default function CurrencyAmount() {
 
 
 
+//fetching currencie  Rate
+const fetchRate = async () => {
+      console.log(source, target, amount)
+    // console.log(source)
+  if (!source || !target || !amount) return;
+  
+
+  try {
+    const token = localStorage.getItem("token");
+        if (!token) return; 
+    const res = await axios.get(
+      `http://localhost:8000/api/exhange-rate?source=${source.id}&target=${target.id}&amount=${amount}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setRate(res.data.data.ex_rate);
+
+  } catch (error) {
+    console.log("Rate fetch error:", error);
+  }
+};
+
+ useEffect(() => {
+  fetchRate();
+}, [source, target, amount]);
+
+
+
+   const handleSubmit = async () => {
+      if (!source || !target || !amount || !rate) {
+        setError("Please select currency and enter amount");
+        return;
+      }
+      setError("");
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found");
+
+      const convertedAmount = parseFloat((amount * rate).toFixed(2));
+
+      const res = await axios.post(
+        "http://localhost:8000/api/save-exchange",
+        {
+          source,
+          target,
+          converted_amount: convertedAmount,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("Saved:", res.data);
+      alert("Exchange saved successfully");
+
+    } catch (error) {
+      console.error("Save error:", error);
+      alert("Error saving exchange");
+    }
+  };
+  
+
+
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
       <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700">
           Send Money
         </h2>
+        {error &&(
+          <p className="bg-red-100 text-red-700 rounded-md mt-3 p-3">
+            {error}
+            </p>
+        )}
 
         <div className="mb-5">
           <label className="block text-gray-600 mb-1 font-medium">
             Your Currency (Sender)
           </label>
-          <select name="" id="" className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400">
-            {senderCurrency.map((cur)=>(
-             <option key={cur.id} value={cur.id}>
-               {cur.name} ({cur.symbol})
+          <select
+            onChange={(e) => setSource(JSON.parse(e.target.value))}
+            name="" id="" className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400">
+              <option value="">Select Sender Country</option>
+            {sender.map((cur)=>(
+             <option key={cur.id} value={JSON.stringify(cur)}>
+               {cur.country.name} ({cur.currency.symbol})
               </option>
             ))}
           </select>
           
-          <input type="number" 
+          <input 
+          value={amount}
+          onChange={(e)=> setAmount(e.target.value)}
+          type="number" 
           placeholder="Enter amount"
            className="w-full mt-4 p-3 rounded-lg border focus:ring-2 focus:ring-blue-400"
           />
@@ -100,15 +175,14 @@ export default function CurrencyAmount() {
             Receiver Country
           </label>
           <select
-           value={receiverCountry}
-           onChange={(e) => setReceiverCountry(e.target.value)}
+           onChange={(e) => setTarget(JSON.parse(e.target.value))}
             className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400"
           >
             <option value="">Select Country</option>
           {/* maping for recivier country  */}
-            {countries.map((country)=>(
-              <option key={country.id} value={country.id}>
-                {country.name}
+            {receiver.map((rec)=>(
+              <option key={rec.id} value={JSON.stringify(rec)}>
+                 {rec.country.name} ({rec.currency.symbol})
               </option>
             ))}
             
@@ -116,36 +190,29 @@ export default function CurrencyAmount() {
           </select>
         </div>
 
-        {/* country currencies  */}
-        <div className="mb-5">
-          <label className="block text-gray-600 mb-1 font-medium">
-             Receiver Currency
-          </label>
-          <select
-            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="">Select Country Currencies</option>
-            {receiverCurrencies.map((recCur)=>(
-              <option key={recCur.id} value={recCur.id}>
-                 {recCur.name} ({recCur.symbol})
-              </option>
-            ))}
-          
-          </select>
-        </div>
+      
+           {rate && amount && (
+            <div className="mt-4 p-4 rounded-xl shadow-sm border bg-white">
+              <div className="text-gray-500 text-sm font-medium">
+                Current Rate
+              </div>
 
-        {/* Sender Amount Input */}
-        <div className="mb-5">
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
+              <div className="mt-1 text-xl font-semibold text-gray-800">
+                {source.currency.code} → {target.currency.code}
+              </div>
+
+              <div className="mt-2 text-2xl font-bold text-blue-600">
+                {(rate).toFixed(2)} {target.currency.code} Per {source.currency.code}
+              </div>
+              
+              <div className="mt-2 text-2xl font-bold text-blue-600">
+                For {(amount)} {source.currency.code} You will get {(amount * rate).toFixed()} {target.currency.code}
+              </div>
+            </div>
+          )}
 
         <button
+          onClick={handleSubmit}
           className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
         >
           Continue
