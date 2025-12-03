@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import CurrencySelectSkelotn from "../component/skeleton/CurrencySelectSkelotn";
 export default function CurrencyAmount() {
+  const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
   const [senderCurrency, setSenderCurrency] = useState([]); 
   const [receiverCountry, setReceiverCountry] = useState("");
@@ -13,7 +15,7 @@ export default function CurrencyAmount() {
   const [target, setTarget] = useState("");
   const [rate, setRate] = useState(null);
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(true)
   const [sender, setSender] = useState([]);
   const [receiver, setReceiver] = useState([]);
 
@@ -33,6 +35,8 @@ export default function CurrencyAmount() {
       
     } catch (error) {
       console.log(error);     
+    } finally{
+      setLoading(false)
     }
   }
 
@@ -40,6 +44,8 @@ export default function CurrencyAmount() {
     getGetAvailableSource();
   }, []);
 
+  // if (loading) return <CurrencySelectSkelotn/>
+     
 
   // Fetch currencies when country changes
   useEffect(()=>{
@@ -85,6 +91,7 @@ const fetchRate = async () => {
     );
 
     setRate(res.data.data.ex_rate);
+    console.log("RATE: ", rate);
 
   } catch (error) {
     console.log("Rate fetch error:", error);
@@ -93,47 +100,42 @@ const fetchRate = async () => {
 
  useEffect(() => {
   fetchRate();
-}, [source, target, amount]);
+}, [source, target, amount, rate]);
 
 
 
    const handleSubmit = async () => {
-      if (!source || !target || !amount || !rate) {
-        setError("Please select currency and enter amount");
-        return;
-      }
-      setError("");
+     if(!source || !target || !amount || !rate){
+        setError('All fields required');
+      return;
+     }
 
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found");
+     try {
+        const token = localStorage.getItem('token');
 
-      const convertedAmount = parseFloat((amount * rate).toFixed(2));
-
-      const res = await axios.post(
-        "http://localhost:8000/api/save-exchange",
-        {
-          source,
-          target,
-          converted_amount: convertedAmount,
+        const res =  await axios.post('http://localhost:8000/api/quotation-store', {
+           source_country_currency_id: source.id,
+           target_country_currency_id: target.id,
+           amount:amount,
+           exchange_rate_id: rate.id,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+         {
+          headers: {
+          Authorization: `Bearer ${token}`,
+        },
+         }
       );
-
-      console.log("Saved:", res.data);
-      alert("Exchange saved successfully");
-
-    } catch (error) {
-      console.error("Save error:", error);
-      alert("Error saving exchange");
-    }
+      const id = res.data.data.id;
+      navigate(`/confirm-cur/${id}`);
+     } catch (err) {
+       console.log('error data', err)
+     }
   };
   
 
 
   return (
+    <>
     <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
       <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700">
@@ -205,9 +207,18 @@ const fetchRate = async () => {
                 {(rate).toFixed(2)} {target.currency.code} Per {source.currency.code}
               </div>
               
-              <div className="mt-2 text-2xl font-bold text-blue-600">
-                For {(amount)} {source.currency.code} You will get {(amount * rate).toFixed()} {target.currency.code}
-              </div>
+             <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+              <p className="text-xl font-semibold text-gray-700">
+                For <span className="text-blue-600 font-bold">{amount}</span> {source.currency.code}
+              </p>
+
+              <p className="text-xl font-semibold text-gray-700 mt-1">
+                You will get 
+                <span className="text-green-600 font-bold"> {(amount * rate).toFixed()} </span>
+                {target.currency.code}
+              </p>
+            </div>
+
             </div>
           )}
 
@@ -219,5 +230,6 @@ const fetchRate = async () => {
         </button>
       </div>
     </div>
+    </>
   );
 }

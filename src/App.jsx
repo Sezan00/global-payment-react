@@ -5,6 +5,7 @@ import SignUp from "./Auth/SignUp";
 import Login from "./Auth/Login";
 import  Payment  from "./payments/payment";
 import CurrencySelect  from "./payments/CurrencySelect";
+import ConfrimCur from "./payments/ConfrimCur";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
       <Route path="login" element={<Login/>}/>
       <Route path="/payment" element={<Payment/>}/> 
       <Route path="/currencyselet" element={<CurrencySelect/>}/>
+      <Route path="/confirm-cur/:id" element={<ConfrimCur/>}/>
+
     </Routes>
   )
 }
