@@ -74,9 +74,24 @@ export const ConfrimCur = () => {
     <div className="my-6 border-t border-gray-200"></div>
 
     {/* Confirm Button */}
-    <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 rounded-xl font-semibold text-lg transition-all duration-300 shadow-md hover:shadow-lg">
-      Confirm & Continue
+   <button className="
+        w-full 
+        bg-linear-to-r from-blue-600 to-blue-700
+        hover:from-blue-700 hover:to-blue-800
+        text-white 
+        py-3 
+        rounded-2xl 
+        font-semibold 
+        text-lg 
+        shadow-[0_4px_10px_rgba(0,0,0,0.15)]
+        hover:shadow-[0_6px_14px_rgba(0,0,0,0.20)]
+        transform hover:-translate-y-0.5
+        transition-all duration-300
+        tracking-wide
+            ">
+    Confirm & Continue
     </button>
+
   </div>
         </div>
 
