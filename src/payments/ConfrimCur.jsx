@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmCurSkeloton from '../component/skeleton/ConfirmCurSkeloton';
 
 export const ConfrimCur = () => {
@@ -8,7 +8,7 @@ export const ConfrimCur = () => {
 
     const [quotation, setQuotation] = useState(null);
     const [loading, setLoding] = useState(true);
-
+    const navigate = useNavigate();
 
 
     useEffect(()=>{
@@ -34,6 +34,24 @@ export const ConfrimCur = () => {
     if (loading) return <ConfirmCurSkeloton />;
     if (!quotation) return <div></div>;
 
+    const handleRecipient = async () => {
+      try{
+        const token = localStorage.getItem('token');
+        const res = await axios.post("http://localhost:8000/api/trainsaction", 
+          {quotation_id:id },
+          {
+            headers:{
+              Authorization: `Bearer ${token}`,
+            }
+          }
+        );
+        navigate(`/recipient/${quotation.id}`);
+
+      } catch(err){
+        console.log('error:', err)
+      }
+
+    }
 
   return (
     <>
@@ -74,7 +92,9 @@ export const ConfrimCur = () => {
     <div className="my-6 border-t border-gray-200"></div>
 
     {/* Confirm Button */}
-   <button className="
+   <button
+    onClick={handleRecipient}
+   className="
         w-full 
         bg-linear-to-r from-blue-600 to-blue-700
         hover:from-blue-700 hover:to-blue-800

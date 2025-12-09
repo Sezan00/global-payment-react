@@ -44,7 +44,6 @@ export default function CurrencyAmount() {
     getGetAvailableSource();
   }, []);
 
-  // if (loading) return <CurrencySelectSkelotn/>
      
 
   // Fetch currencies when country changes
