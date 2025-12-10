@@ -7,6 +7,8 @@ import  Payment  from "./payments/payment";
 import CurrencySelect  from "./payments/CurrencySelect";
 import ConfrimCur from "./payments/ConfrimCur";
 import Recipient from "./payments/Recipient";
+import RecipientList from "./payments/RecipientList";
+import RecipientFull from "./payments/RecipientFull";
 
 function App() {
   return (
@@ -18,7 +20,8 @@ function App() {
       <Route path="/currencyselet" element={<CurrencySelect/>}/>
       <Route path="/confirm-cur/:id" element={<ConfrimCur/>}/>
       <Route path="/recipient/:id" element={<Recipient/>}/>
-
+      <Route path="/recipient-list" element={<RecipientList/>}/>
+      <Route path="/recipient-view/:id" element={<RecipientFull/>}/>
     </Routes>
   )
 }

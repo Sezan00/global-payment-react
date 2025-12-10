@@ -1,0 +1,139 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import RecipientFullSkeloton from '../component/skeleton/RecipientFullSkeloton';
+
+export const RecipientFull = () => {
+   const { id } = useParams();
+  const [singleRecipient, setSingleRecipient] = useState(null);
+  const [Loading, setLoading] = useState(true);
+
+  const fetchSingleRecipient = async () =>{
+    try{
+        const token = localStorage.getItem('token');
+         const res = await axios.get(`http://localhost:8000/api/recipients/${id}`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        })
+        setSingleRecipient(res.data)
+        console.log('Single Recipient:', res.data);
+    } catch(Erorr){
+      console.log('Error:', Erorr)
+    } finally{
+      setLoading(false);
+    }
+   
+  }
+    useEffect(() => {
+      fetchSingleRecipient();
+  }, [id]);
+
+
+  if(Loading){
+    return  <RecipientFullSkeloton/>
+  }
+  
+  
+  return (
+    <>
+   
+      <div className="min-h-screen bg-gray-50 flex justify-center items-center px-4">
+          <div className="w-full max-w-3xl bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-200">
+
+
+          <h1 className="text-3xl font-semibold text-center text-gray-800 tracking-wide">
+          Recipient Details
+          </h1>
+          <p className="text-center text-gray-500 mt-1 text-sm">
+          View all saved recipient information
+          </p>
+          <p className='flex justify-end font-bold'>
+            Create at: {new Date(singleRecipient.Recipient.created_at).toLocaleDateString()}
+          </p>
+
+          <div className="mt-8 space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          {/* {singleRecipient.Recipient.map((item)=>(
+            <div key={item.id} className="space-y-3"> */}
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer transition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Recipient Type</p>
+          <p className="text-gray-800 font-semibold"> {singleRecipient?.Recipient?.receive_type ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Full Name</p>
+          <p className="text-gray-800 font-semibold cursor-pointer">{singleRecipient?.Recipient?.full_name ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Bank Name</p>
+          <p className="text-gray-800 font-semibold">"{singleRecipient?.Recipient?.bank_name ?? "Null"}"</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Account Number</p>
+          <p className="text-gray-800 font-semibold">{singleRecipient?.Recipient?.bank_account ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Address</p>
+          <p className="text-gray-800 font-semibold">{singleRecipient?.Recipient?.address ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Email</p>
+          <p className="text-gray-800 font-semibold">{singleRecipient?.Recipient?.email ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Phone</p>
+          <p className="text-gray-800 font-semibold">{singleRecipient?.Recipient?.phone ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">City</p>
+          <p className="text-gray-800 font-semibold">{singleRecipient?.Recipient?.city ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Wallet Type</p>
+          <p className="text-gray-800 font-semibold capitalize">{singleRecipient?.Recipient?.wallet_type ?? "Null"}</p>
+          </div>
+
+
+          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1">
+          <p className="text-gray-500 text-sm">Wallet Number</p>
+          <p className="text-gray-800 font-semibold">{singleRecipient?.Recipient?.wallet_number ?? 'Null'}</p>
+          </div>
+          {/* </div> */}
+          {/* ))} */}
+         
+
+
+          </div>
+
+
+          <button className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition-all text-lg">
+          Back
+          </button>
+
+
+          </div>
+          </div>
+          </div>
+    
+    </>
+  )
+}
+
+export default RecipientFull;
