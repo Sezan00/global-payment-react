@@ -38,7 +38,7 @@ export const RecipientFull = () => {
   }
 
 
-      const updateRecipient = async (field, value) => {
+ const updateRecipient = async (field, value) => {
     try {
       const token = localStorage.getItem('token');
 
@@ -62,10 +62,6 @@ export const RecipientFull = () => {
           [field]: value   
       }
     }));
-
-      
-
-      alert("Update successful");
 
     } catch (err) {
       console.error(err);
