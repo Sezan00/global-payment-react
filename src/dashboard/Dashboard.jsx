@@ -40,6 +40,11 @@ export const Dashboard = () => {
             >
               Payments
             </div>
+            <div className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer"
+              onClick={()=>navigate(`/recipient-dash`)}
+            >
+              Recipient
+            </div>
             <div className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer">
               Analytics
             </div>

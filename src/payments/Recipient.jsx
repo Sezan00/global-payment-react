@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 export const Recipient = () => {
   const [quotation, setQuotation] = useState(null);
-  const {id} = useParams();
+  const { id } = useParams();
   
   const [formData, SetFormData] = useState({
       receive_type: "",
@@ -21,7 +21,6 @@ export const Recipient = () => {
 
   const handleChange = (e) => {
     SetFormData({...formData, [e.target.name]: e.target.value});
-    
   }
 
 
@@ -59,12 +58,13 @@ export const Recipient = () => {
     const handleSubmit = async (e)=> {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
-    if(!token) return;
+
 
     try{
+      const token = localStorage.getItem('token');
       const res = await axios.post('http://localhost:8000/api/recipients/store',
-        {quotation_id:id,
+        {transactionId: id,
+          quotation_id:id,
           target_country_currency_id: formData.target_country_currency_id,
           ...formData
         },

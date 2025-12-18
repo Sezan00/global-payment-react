@@ -35,23 +35,26 @@ export const ConfrimCur = () => {
     if (loading) return <ConfirmCurSkeloton />;
     if (!quotation) return <div></div>;
 
-    const handleRecipient = async () => {
-      try{
-        const token = localStorage.getItem('token');
-        const res = await axios.post("http://localhost:8000/api/trainsaction", 
-          {quotation_id:id },
-          {
-            headers:{
-              Authorization: `Bearer ${token}`,
-            }
-          }
-        );
-        navigate(`/recipient/${quotation.id}`);
+    // const handleRecipient = async () => {
+    //   try{
+    //     const token = localStorage.getItem('token');
+    //     const res = await axios.post("http://localhost:8000/api/trainsaction", 
+    //       {quotation_id:id },
+    //       {
+    //         headers:{
+    //           Authorization: `Bearer ${token}`,
+    //         }
+    //       }
+    //     );
+    //     navigate(`/recipient-list/${res.data.data.id}`);
 
-      } catch(err){
-        console.log('error:', err)
-      }
+    //   } catch(err){
+    //     console.log('error:', err)
+    //   }
+    // }
 
+    const handleRecipient = () => {
+        navigate(`/recipient-list/${id}`);
     }
 
   return (
@@ -59,7 +62,8 @@ export const ConfrimCur = () => {
     
         <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
    <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl border border-gray-200">
-    <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
+    <h2 className="text-3xl font-bold text-gray-800 text-center mb-6"
+    >
       Confirm Your Amount
     </h2>
 
