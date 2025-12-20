@@ -19,6 +19,31 @@ export const Recipient = () => {
       wallet_number: ""
   });
 
+    const [error, setError] = useState({});
+
+  const [countries, setCountries] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
+  const [data, setData] = useState({});
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState('');
+
+  useEffect(()=>{
+    const fetchCountryCurrencies = async () => {
+
+      const token = localStorage.getItem('token');
+      try{
+        const res = await axios.get(`http://localhost:8000/api/country-currencie`,{
+          headers:{Authorization: `Bearer ${token}`}
+        })
+         setData(res.data);
+         console.log('Res Data', res);
+      } catch(error){
+        console.log('error data', error)
+      } 
+   };
+   fetchCountryCurrencies();
+  },[]);
+
   const handleChange = (e) => {
     SetFormData({...formData, [e.target.name]: e.target.value});
   }
@@ -58,7 +83,7 @@ export const Recipient = () => {
     const handleSubmit = async (e)=> {
     e.preventDefault();
 
-
+      
 
     try{
       const token = localStorage.getItem('token');
@@ -102,7 +127,7 @@ export const Recipient = () => {
             <label className="text-gray-700 font-medium text-sm">
               Recipient Type
             </label>
-            <select name='receive_type' onChange={handleChange} className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition">
+            <select name='receive_type' onChange={handleChange}  className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition" required>
               <option value="">Select Type</option>
               <option value="person">Person</option>
               <option value="business">Business</option>
@@ -121,32 +146,6 @@ export const Recipient = () => {
             />
           </div>
 
-          {/* Country */}
-          {/* <div className="space-y-1">
-            <label className="text-gray-700 font-medium text-sm">Country</label>
-            {quotation?.target_currency?.country ? (
-              <p className='w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition' value={quotation.target_currency.country.id}> {quotation.target_currency.country.name} </p>
-            ) : (
-               <div className="w-full h-10 bg-gray-300 rounded-lg animate-pulse"></div>
-            )
-            }
-        
-          </div> */}
-
-          {/* Currency */}
-          {/* <div className="space-y-1">
-            <label className="text-gray-700 font-medium text-sm">Currency</label>
-    
-              {quotation?.target_currency?.currency ?(
-                <p className='w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition' value={quotation.target_currency.currency.id}> {quotation.target_currency.currency.name} </p>
-              ): (
-                <div className='w-full h-10 bg-gray-300 rounded-lg animate-pulse'></div>
-              )
-            
-            }
-         
-          </div> */}
-
               {/* bank name  */}
           <div className="space-y-1">
             <label className="text-gray-700 font-medium text-sm">Bank Name</label>
@@ -159,6 +158,57 @@ export const Recipient = () => {
             />
           </div>
 
+          {/* country  */}
+          <div className="space-y-1">
+            <label className="text-gray-700 font-medium text-sm">Country</label>
+            <select
+             value={selectedCountry}
+             onChange={(e)=>{
+              const countryId = e.target.value;
+              setSelectedCountry(countryId);
+              setSelectedCurrency("");
+
+              const countryCurrencies = data[countryId] || [];
+              setCurrencies(countryCurrencies);
+              SetFormData(prev => ({...prev, target_country_currency_id: ''}));
+             }} 
+             className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition"             
+             required
+             >
+              <option value="">Select Type</option>
+              {Object.values(data).map(item=>(
+                <option key={item[0].country.id} value={item[0].country.id}>{item[0].country.name}</option>
+              ))}
+              
+            </select>
+          </div>
+            {/* currency  */}
+          <div className="space-y-1">
+            <label className="text-gray-700 font-medium text-sm">currency</label>
+            <select 
+              value={selectedCurrency}
+              onChange={(e)=>{
+                const currencyId = e.target.value
+                setSelectedCurrency(currencyId);
+                SetFormData(prev=>({
+                 ...prev,
+                 target_country_currency_id: currencyId
+                }));
+              }}
+              disabled={!currencies.length}
+            className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition"
+
+            >
+              <option value="">Select Type</option>
+              {currencies.map(item=>(
+                <option key={item.currency.id} value={item.currency.id}>
+                   {item.currency.name} ({item.currency.code})
+                </option>
+              ))}
+       
+            </select>
+          </div>
+
           {/* Account Number */}
           <div className="space-y-1">
             <label className="text-gray-700 font-medium text-sm">
@@ -166,7 +216,6 @@ export const Recipient = () => {
             </label>
             <input
               name='bank_account'
-              onChange={handleChange}
               type="text"
               placeholder="Enter account number"
               className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition"

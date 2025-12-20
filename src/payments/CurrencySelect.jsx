@@ -72,7 +72,7 @@ export default function CurrencyAmount() {
 
 //fetching currencie  Rate
 const fetchRate = async () => {
-      console.log(source, target, amount)
+      console.log( 'Some data', source, target, amount)
     // console.log(source)
   if (!source || !target || !amount) return;
   
