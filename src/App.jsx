@@ -12,7 +12,7 @@ import RecipientFull from "./payments/RecipientFull";
 import RecipientCRUD from "./dashboard/RecipientCRUD";
 import FundAndRealtion from "./payments/FundAndRealtion";
 import  PayMore  from "./payments/PayMore";
-
+import FlowRecipientCreate  from "./payments/FlowRecipientCreate";
 function App() {
   return (
     <Routes>
@@ -28,6 +28,7 @@ function App() {
       <Route path="/recipient-dash" element={<RecipientCRUD/>}/>
       <Route path="/sourcfund-realtion/:id" element={<FundAndRealtion/>}/>
       <Route path="/paymore/:id" element={<PayMore/>}/>
+      <Route path="/recipient-create/:id" element={<FlowRecipientCreate/>}/>
     </Routes>
   )
 }

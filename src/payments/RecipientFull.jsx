@@ -9,7 +9,23 @@ export const RecipientFull = () => {
     const [Loading, setLoading] = useState(true);
     const [editField, setEditField] = useState(null);
     const [editValue, setEditValue] = useState("");
+    const [relation, setRelation] = useState([]);
 
+const fetchRelation = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await axios.get(`http://localhost:8000/api/relations`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setRelation(res.data);
+  } catch (err) {
+    console.log('Error fetching relations:', err);
+  }
+};
+
+useEffect(() => {
+  fetchRelation();
+}, []);
 
   const fetchSingleRecipient = async () =>{
     try{
@@ -20,7 +36,6 @@ export const RecipientFull = () => {
           }
         })
         setSingleRecipient(res.data)
-        console.log('Single Recipient:', res.data);
     } catch(Erorr){
       console.log('Error:', Erorr)
     } finally{
@@ -71,6 +86,7 @@ export const RecipientFull = () => {
     const fields = [
       'receive_type',
       'full_name',
+      'relation_id',
       'phone',
       'email',
       'city',
@@ -102,34 +118,72 @@ export const RecipientFull = () => {
           <div className="mt-8 space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-          {/* {singleRecipient.Recipient.map((item)=>(
-            <div key={item.id} className="space-y-3"> */}
-          
+            {/* Recipient type  */}
 
-          {/* Receive type section  */}
-          <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer transition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1"
+          <div className='p-4 bg-gray-100 rounded-xl border cursor-pointer transition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1'
             onClick={()=>{
-              setEditField('receive_type');
-              setEditValue(singleRecipient?.Recipient?.receive_type);
+              setEditField('receive_type')
+              setEditValue(singleRecipient?.Recipient?.receive_type)
             }}
           >
-          <p className="text-gray-500 text-sm">Recipient Type</p>
-            {editField === "receive_type" ? (
-              <input type="text" 
-              className="w-full p-2 border rounded-lg bg-white"
-              autoFocus
-              value={editValue}
-              onChange={(e)=> setEditValue(e.target.value)}
-              onBlur={() => {
-              updateRecipient("receive_type", editValue);
-              setEditField(null);
-            }}                      
-              />
+            <p className='text-gray-500 text-sm'>Recipient Type</p>
+            {editField === 'receive_type' ? (
+              <select   
+               className='w-full p-2 border rounded-lg bg-white'
+                value={editValue}
+                onChange={(e)=> {setEditValue(e.target.value);
+                 updateRecipient('receive_type', e.target.value);
+                }}
+                onBlur={()=>{
+                  setEditField(null);
+                }}
+              >
+                <option value="">Select Type</option>
+                <option value="business">Business</option>
+                <option value="Person">Person</option>
+              </select>
             ) : (
-              <p className="text-gray-800 font-semibold"> {singleRecipient?.Recipient?.receive_type ?? "Null"}</p>
+                <p className="text-gray-800 font-semibold"> {singleRecipient?.Recipient?.receive_type ?? "Null"}</p>
             )
           }
           </div>
+
+ {/* Relation section  */}
+
+      <div className='space-y-1'>
+        <p className="text-gray-500 text-sm">Relation</p>
+
+        {editField === 'relation_id' ? (
+          <select
+            className='w-full p-2 border rounded-lg bg-white'
+            name='relation_id'
+            value={editValue || ''}
+            onChange={(e) => {
+              setEditValue(e.target.value);
+              updateRecipient('relation_id', e.target.value);
+            }}
+            onBlur={() => setEditField(null)}
+            autoFocus
+          >
+            <option value="">Select Relation</option>
+            {relation.map(itemRln => (
+              <option key={itemRln.id} value={itemRln.id}>
+                {itemRln.relation}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <div
+            className="w-full p-2 border rounded-lg bg-gray-100 cursor-pointer"
+            onClick={() => setEditField('relation_id')}
+          >
+            {relation.length > 0 && singleRecipient?.Recipient?.relation_id
+              ? relation.find(r => r.id === singleRecipient.Recipient.relation_id)?.relation
+              : "Null"}
+          </div>
+        )}
+      </div>
+
 
           {/* Full name section  */}
           <div className="p-4 bg-gray-100 rounded-xl border cursor-pointer ransition-all duration-200 hover:bg-gray-200 hover:shadow-md hover:translate-y-1"

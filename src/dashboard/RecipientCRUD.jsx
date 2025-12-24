@@ -18,7 +18,7 @@ export const RecipientCRUD = () => {
             const fetchRecipient = async ()=>{
             try{
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:8000/api/recipients-list', {
+                const res = await axios.get('http://localhost:8000/api/recipients-show', {
                 headers:{
                     Authorization: `Bearer ${token}`,
                 }
@@ -89,6 +89,7 @@ export const RecipientCRUD = () => {
                         {RecipientList && RecipientList.length  > 0 ?  (
                         RecipientList?.map((item) => (
                         <tr
+                            key={item.id}
                             onClick={()=> setSelectedId(item.id)}
                             className={`cursor-pointer transition-colors duration-200
                                 ${selectedId === item.id ? 'bg-blue-100' : 'odd:bg-white even:bg-gray-50'}

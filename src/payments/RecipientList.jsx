@@ -19,7 +19,7 @@ export const RecipientList = () => {
     const fetchRecipient = async ()=>{
       try{
         const token = localStorage.getItem('token');
-         const res = await axios.get('http://localhost:8000/api/recipients-list', {
+         const res = await axios.get(`http://localhost:8000/api/recipients-list?quotation_id=${id}`, {
           headers:{
             Authorization: `Bearer ${token}`,
           }
@@ -27,14 +27,15 @@ export const RecipientList = () => {
          setRecipientList(res.data.data);
           console.log("Full Response:", res.data);
        console.log("Recipient List:", res.data.data);
+       console.log("Quotation ID:", id);
       } catch(error){
         console.log('error data', error)
       } finally{
         setLoading(false)
       }
     }
-    fetchRecipient();
-  }, [])
+   if(id) fetchRecipient();
+  }, [id])
 
   if(loading) return  <RecipientSkelotn/>;
   if(!RecipientList) return <div></div>
@@ -89,6 +90,7 @@ export const RecipientList = () => {
                 {RecipientList && RecipientList.length  > 0 ?  (
                 RecipientList?.map((item) => (
                   <tr
+                    key={item.id}
                     onClick={()=> {setSelectedId(item.id)
                       handleSelectRecipient(item.id);
                     }}
@@ -105,11 +107,20 @@ export const RecipientList = () => {
                   </tr>
                 )) 
               ): (
-                    <tr>
-                <td colSpan="5" className="text-center py-4 text-gray-500">
-                  No Recipient Found
-                </td>
-              </tr>
+               <tr>
+      <td colSpan="5" className="text-center py-4 text-gray-500">
+        No Recipient Found
+        <div className="mt-2">
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            onClick={() => navigate(`/recipient-create/${id}`)}
+          >
+            Create Recipient
+          </button>
+        </div>
+      </td>
+    </tr>
+
               )}
               
               </tbody>

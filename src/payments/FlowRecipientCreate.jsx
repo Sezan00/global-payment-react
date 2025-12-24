@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 export const Recipient = () => {
   const [quotation, setQuotation] = useState(null);
   const { id } = useParams();
+ 
   
   const navigate = useNavigate();
   const [formData, SetFormData] = useState({
@@ -116,13 +117,13 @@ export const Recipient = () => {
           },
         }
       );
-       navigate('/recipient-dash'); 
+       navigate(`/recipient-list/${id}`);
       console.log('Saved', res.data);
     }catch(error){
       console.log("Erorr", error.response?.data || error);
     }
-    
   };
+ 
 
   return (
     <>
@@ -196,12 +197,12 @@ export const Recipient = () => {
           <div className="space-y-1">
             <label className="text-gray-700 font-medium text-sm">Country</label>
             <select
-             value={selectedCountry} 
+             value={selectedCountry}
              onChange={(e)=>{
               const countryId = e.target.value;
               setSelectedCountry(countryId);
               setSelectedCurrency("");
-              
+
               const countryCurrencies = data[countryId] || [];
               setCurrencies(countryCurrencies);
               SetFormData(prev => ({...prev, target_country_currency_id: ''}));
@@ -235,7 +236,7 @@ export const Recipient = () => {
             >
               <option value="">Select Type</option>
               {currencies.map(item=>(
-                <option key={item.currency.id} value={item.id}>
+                <option key={item.currency.id} value={item.currency.id}>
                    {item.currency.name} ({item.currency.code})
                 </option>
               ))}

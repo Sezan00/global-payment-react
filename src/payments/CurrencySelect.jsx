@@ -102,7 +102,7 @@ const fetchRate = async () => {
 }, [source, target, amount, rate]);
 
 
-
+  // it save on quotation table and navigate 
    const handleSubmit = async () => {
      if(!source || !target || !amount || !rate){
         setError('All fields required');
