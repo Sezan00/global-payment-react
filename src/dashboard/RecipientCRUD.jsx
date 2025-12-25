@@ -10,7 +10,8 @@ export const RecipientCRUD = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedRecipient, setSelectedRecipient] = useState(null);
     const [selectedId, setSelectedId] = useState(null);
-
+    const [errorMessage, setErrorMessage] = useState(null);
+    
 
      const navigate = useNavigate();
 
@@ -54,6 +55,11 @@ export const RecipientCRUD = () => {
             console.log('Recipient deleted successfully');
             
             }catch(err){
+           if(err.response && err.response.data && err.response.data.message){
+                setErrorMessage(err.response.data.message);
+            } else {
+                setErrorMessage("Something went wrong. Please try again.")
+            }
             console.log(err);
             }
         }
@@ -134,6 +140,9 @@ export const RecipientCRUD = () => {
                     <div className="fixed inset-0 bg-transparent backdrop-blur-sm  flex items-center justify-center z-50">
                         <div className="bg-white rounded-lg shadow-lg w-96 p-6">
                         <h2 className="text-xl font-semibold mb-4">Confirm Delete</h2>
+                        {errorMessage &&(
+                            <p className='text-red-400 font-bold'>{errorMessage}</p>
+                        )}
                         <p className="mb-6">
                             Are you sure you want to delete <strong>{selectedRecipient.full_name}</strong>?
                         </p>

@@ -10,7 +10,30 @@ export const RecipientFull = () => {
     const [editField, setEditField] = useState(null);
     const [editValue, setEditValue] = useState("");
     const [relation, setRelation] = useState([]);
+    const [countryCurrencie, setCountryCurencie] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [currencies, setCurrencies] = useState([]);
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
+    
+    //data fetching country currency 
+      useEffect(()=>{
+    const fetchCountryCurrencies = async () => {
 
+      const token = localStorage.getItem('token');
+      try{
+        const res = await axios.get(`http://localhost:8000/api/country-currencie`,{
+          headers:{Authorization: `Bearer ${token}`}
+        })
+         setCountryCurencie(res.data);
+         console.log('Res Data', res);
+      } catch(error){
+        console.log('error data', error)
+      } 
+   };
+   fetchCountryCurrencies();
+  },[]);
+  //fetching and geting relation data 
 const fetchRelation = async () => {
   try {
     const token = localStorage.getItem('token');
@@ -27,6 +50,7 @@ useEffect(() => {
   fetchRelation();
 }, []);
 
+  // show recipient data from database 
   const fetchSingleRecipient = async () =>{
     try{
         const token = localStorage.getItem('token');
@@ -55,6 +79,9 @@ useEffect(() => {
 
  const updateRecipient = async (field, value) => {
     try {
+      setSuccessMessage(null)
+      setErrorMessage(null);
+
       const token = localStorage.getItem('token');
 
       const res = await axios.put(
@@ -77,16 +104,22 @@ useEffect(() => {
           [field]: value   
       }
     }));
+     setSuccessMessage(res.data.message);
 
     } catch (err) {
-      console.error(err);
-      alert("Failed");
+      if(err.response && err.response.data && err.response.data.message){
+        setErrorMessage(err.response.data.message);
+      } else {
+        setErrorMessage("Something went wrong. Please try again.")
+      }
+      console.log(err);
     }
   };
     const fields = [
       'receive_type',
       'full_name',
       'relation_id',
+      'target_country_currency_id',
       'phone',
       'email',
       'city',
@@ -97,13 +130,20 @@ useEffect(() => {
       'wallet_number',
     ];
   
+    
   
   return (
     <>
    
       <div className="min-h-screen bg-gray-50 flex justify-center items-center px-4">
           <div className="w-full max-w-3xl bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-200">
+          {errorMessage &&(
+            <h3 className='text-3xl text-red-500'>{errorMessage}</h3>
+          )}
 
+          {successMessage && (
+            <h3 className='text-3xl text-blue-400'>{successMessage}</h3>
+          )}
 
           <h1 className="text-3xl font-semibold text-center text-gray-800 tracking-wide">
           Recipient Details
@@ -183,6 +223,71 @@ useEffect(() => {
           </div>
         )}
       </div>
+
+        {/* contry  */}
+        <div className='space-y-1'>
+          <p className='text-gray-500 text-sm'>Country</p>
+          {editField === 'target_country_currency_id' ? (
+            <select
+              className='w-full p-2 border rounded-lg bg-white'
+              value={selectedCountry}
+              onChange={(e)=>{
+                const countryId = e.target.value
+                setSelectedCountry(countryId)
+
+                const list = countryCurrencie[countryId] || [];
+                setCurrencies(list);
+                setEditValue('');
+              }}
+            >
+              <option value="">Select Country</option>
+              {Object.values(countryCurrencie).map(item => (
+                <option key={item[0].country.id} value={item[0].country.id}>
+                  {item[0].country.name}  
+                </option>
+              ))}
+            </select>
+          ) : (
+            <div 
+              className='w-full p-2 border rounded-lg bg-gray-100 cursor-pointer'
+               onClick={()=> setEditField('target_country_currency_id')}
+            >
+              {singleRecipient?.Recipient?.country_currency?.country?.name ?? "NULL"}
+            </div>
+          )}
+        </div>
+
+        {/* currencie section  */}
+
+        <div className='space-y-1'>
+          <p className='text-gray-500 text-sm'>Country</p>
+          {editField === 'target_country_currency_id' ? (
+            <select
+             className='w-full p-2 border rounded-lg bg-white'
+             value={editValue  || ''}
+             onChange={(e) => {
+              const value  = e.target.value
+              setEditValue(value);
+              updateRecipient('target_country_currency_id', value);
+             }}
+            >
+              <option value="">Select Currency</option>
+              {currencies.map(item=> (
+                <option key={item.id} value={item.id}>
+                    {item.currency.name} ({item.currency.code})
+                </option>
+              ))}
+            </select>
+          ) : (
+           <div className='w-full p-2 border rounded-lg bg-gray-100 cursor-pointer'
+              onClick={()=> setEditField('target_country_currency_id')}
+           >  
+            {singleRecipient?.Recipient?.country_currency?.currency?.name}
+
+           </div>
+          )
+        }
+        </div>
 
 
           {/* Full name section  */}
