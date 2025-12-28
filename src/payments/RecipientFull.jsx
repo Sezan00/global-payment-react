@@ -474,16 +474,19 @@ useEffect(() => {
           >
           <p className="text-gray-500 text-sm">Wallet Type</p>
           {editField === 'wallet_type' ? (
-            <input
+            <select
               className='w-full p-2 border rounded-lg bg-white'
-              autoFocus
               value={editValue}
-              onChange={(e)=>setEditValue(e.target.value)}
-               onBlur={() => {
-              updateRecipient("wallet_type", editValue);
-              setEditField(null);
-            }}
-            />
+              onChange={(e)=> {setEditValue(e.target.value);
+                updateRecipient('wallet_type', e.target.value);
+              }}
+              onBlur={() => setEditField(null)}
+            >
+              <option value="">Select Wallet Type</option>
+              <option value="bkash">Bkash</option>
+              <option value="nagad">Nagad</option>
+              <option value="rocket">Rocket</option>
+            </select>
           ) : (
             <p className="text-gray-800 font-semibold capitalize">{singleRecipient?.Recipient?.wallet_type ?? "Null"}</p>
           )}
