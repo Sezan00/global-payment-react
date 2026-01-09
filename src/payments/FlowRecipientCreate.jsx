@@ -100,7 +100,7 @@ export const Recipient = () => {
   }, [quotation])
 
 
-    const handleSubmit = async (e)=> {
+ const handleSubmit = async (e)=> {
     e.preventDefault();
 
     try{
@@ -236,7 +236,7 @@ export const Recipient = () => {
             >
               <option value="">Select Type</option>
               {currencies.map(item=>(
-                <option key={item.currency.id} value={item.currency.id}>
+                <option key={item.id} value={item.id}>
                    {item.currency.name} ({item.currency.code})
                 </option>
               ))}

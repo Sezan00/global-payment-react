@@ -57,7 +57,7 @@ export const FundAndRealtion = () => {
         );
         console.log("Submitting:", formData);
 
-        //  navigate(`/paymore/${id}`)
+         navigate(`/transfer-view/${id}`)
          } catch(error){
             console.log(error);
             alert('bal hyche');

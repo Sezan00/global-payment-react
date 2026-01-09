@@ -21,6 +21,7 @@ export const ConfrimCur = () => {
                          Authorization: `Bearer ${token}`,
                     },
                 });
+                console.log(res.data.data);
                 setQuotation(res.data.data);
             }catch(err){
                 console.log('error', err)

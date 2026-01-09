@@ -13,6 +13,8 @@ import RecipientCRUD from "./dashboard/RecipientCRUD";
 import FundAndRealtion from "./payments/FundAndRealtion";
 import  PayMore  from "./payments/PayMore";
 import FlowRecipientCreate  from "./payments/FlowRecipientCreate";
+import ProfileEdit from "./Profile/ProfileEdit";
+import TransferView  from "./payments/TransferView";
 function App() {
   return (
     <Routes>
@@ -29,6 +31,8 @@ function App() {
       <Route path="/sourcfund-realtion/:id" element={<FundAndRealtion/>}/>
       <Route path="/paymore/:id" element={<PayMore/>}/>
       <Route path="/recipient-create/:id" element={<FlowRecipientCreate/>}/>
+      <Route path="/profile-edit/:id" element={<ProfileEdit/>}/>
+      <Route path="/transfer-view/:id" element={<TransferView/>}/>
     </Routes>
   )
 }
