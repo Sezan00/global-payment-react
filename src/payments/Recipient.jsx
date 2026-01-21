@@ -10,23 +10,40 @@ export const Recipient = () => {
 
   const navigate = useNavigate();
   const [formData, SetFormData] = useState({
+    source_country_currency_id: "",
+    target_country_currency_id: "",
     receive_type: "",
     full_name: "",
     phone: "",
     email: "",
     city: "",
     address: "",
+    post_code:"",
     bank_name: "",
     bank_account: "",
     wallet_type: "",
     wallet_number: ""
   });
 
-  const [attributes, setAttributes] = useState([
-    { key: 'account_type', value: 'swift_code' },
-    { key: 'swift_code', value: '' },
-    { key: 'legal_type', value: '' }
-  ]);
+  // const [attributes, setAttributes] = useState([
+  //   { key: 'swiftCode', value: '' },
+  //   { key: 'legalType', value: '' }
+  // ]);
+
+  const [attributes, setAttributes] = useState([]);
+  const [fields, setFields] = useState([]);
+
+
+
+  useEffect(()=>{
+    if(dynamicFields.length){
+      const initialAttributes = dynamicFields.map(field => ({
+        key: field.key,
+        value: ''
+      }));
+      setAttributes(initialAttributes);
+    }
+  }, [dynamicFields]);
 
   const getAttrvalue = (key) =>
     attributes.find(a => a.key === key)?.value || '';
@@ -34,10 +51,18 @@ export const Recipient = () => {
     setAttributes(prev => prev.map(a => a.key === key ? { ...a, value } : a));
   }
 
+
+
   const [error, setError] = useState({});
 
   const [countries, setCountries] = useState([]);
   const [currencies, setCurrencies] = useState([]);
+
+  // fetch source currency 
+  const [userCurrencies, setUserCurrencies] = useState([]);
+  const [selectedUserCurrency, setSelectedUserCurrency] = useState('');
+
+  
   const [data, setData] = useState({});
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState('');
@@ -115,17 +140,34 @@ export const Recipient = () => {
 
   // payload section for save multple data 
 
-  const preparePayload = () => ({
+  //i can't undrastand this code for what copy from GPT
+  const preparePayload = () => {
+  const mappedAttributes = Object.fromEntries(
+    attributes.map(a => {
+      let key = a.key;
+
+      if (key === 'legal_type') key = 'legalType';
+      if (key === 'swift_code') key = 'swift_code';
+      if (key === 'account_type') key = 'account_type';
+
+      return [key, a.value];
+    })
+  );
+
+  return {
     transactionId: id,
     quotation_id: id,
     target_country_currency_id: formData.target_country_currency_id,
     ...formData,
-    attributes: Object.fromEntries(attributes.map(a => [a.key, a.value]))
-  })
+    attributes: mappedAttributes
+  };
+};
+
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      console.log('Attributes before submit:', attributes);
 
     try {
       const token = localStorage.getItem('token');
@@ -159,6 +201,25 @@ export const Recipient = () => {
     }
     fetchFields();
   }, [selectedCurrency])
+
+  useEffect(()=>{
+    fetchCurrency()
+  },[]);
+
+  const fetchCurrency = async () => {
+    try{
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8000/api/usercurrency', {
+        headers: { Authorization: `Bearer ${token}`
+      }
+    });
+      setUserCurrencies(response.data.data || []);
+      console.log('Currency Data', response.data);
+    }catch(err){
+      console.log('Error', err);
+    }
+  }
+
 
   return (
     <>
@@ -214,6 +275,31 @@ export const Recipient = () => {
                 ))}
               </select>
 
+            </div>
+
+            {/* source currency section  */}
+            <div>
+              <label className='text-gray-700 font-medium text-sm'>Source currency</label>
+              <select 
+              value={formData.source_country_currency_id || ''}
+              onChange={(e)=>{
+                const currencyId = Number(e.target.value);
+                setSelectedUserCurrency(currencyId);
+                  SetFormData(prev => ({
+                    ...prev,
+                     source_country_currency_id: currencyId
+                  }))
+              }}
+              className='w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition'
+              >
+                <option value="">Source Currency</option>
+                {userCurrencies.map(c => (
+                  <option key={c.id} value={c.id}> 
+                    {c.country.name} ({c.currency.code}) 
+                  </option>
+                ))}
+
+              </select>
             </div>
 
 
@@ -298,7 +384,6 @@ export const Recipient = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {dynamicFields.map(field => {
                 const value = getAttrvalue(field.key);
-
                 if (field.type === 'text') {
                   return (
                     <div key={field.key} className='space-y-1'>
@@ -342,6 +427,7 @@ export const Recipient = () => {
               </label>
               <input
                 name='bank_account'
+                onChange={handleChange}
                 type="text"
                 placeholder="Enter account number"
                 className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition"
@@ -355,6 +441,18 @@ export const Recipient = () => {
                 onChange={handleChange}
                 type="text"
                 placeholder="Enter address"
+                className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition"
+              />
+            </div>
+            
+            {/* post code  */}
+            <div className="space-y-1">
+              <label className="text-gray-700 font-medium text-sm">Post Code</label>
+              <input
+                name='post_code'
+                onChange={handleChange}
+                type="text"
+                placeholder="Enter correct post code"
                 className="w-full p-3 rounded-lg bg-gray-100 focus:bg-white border border-gray-300 focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
