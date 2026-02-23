@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const TransferView = () => {
- 
+ const navigate = useNavigate();
  const [TranData, setTranData] = useState("");
  const {id} = useParams();
   useEffect(()=>{
@@ -36,8 +36,7 @@ export const TransferView = () => {
         },
       }
     );
-
-    alert('Transfer is being processed');
+     navigate(`/payment/checkout/${id}`)
   } catch (err) {
     alert('Something went wrong');
   }

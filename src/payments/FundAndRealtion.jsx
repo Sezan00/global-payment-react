@@ -60,7 +60,7 @@ export const FundAndRealtion = () => {
          navigate(`/transfer-view/${id}`)
          } catch(error){
             console.log(error);
-            alert('bal hyche');
+            alert('Something wend wrong');
          }
       
   };

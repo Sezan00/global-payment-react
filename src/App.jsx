@@ -15,11 +15,12 @@ import  PayMore  from "./payments/PayMore";
 import FlowRecipientCreate  from "./payments/FlowRecipientCreate";
 import ProfileEdit from "./Profile/ProfileEdit";
 import TransferView  from "./payments/TransferView";
+import StripePayment from "./payments/Stripe/StripePayment";
 function App() {
   return (
     <Routes>
       <Route path="/dashboard/:name" element={<Dashboard />} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route path="/signup" element={<SignUp/>} />
       <Route path="login" element={<Login/>}/>
       <Route path="/payment" element={<Payment/>}/> 
       <Route path="/currencyselet" element={<CurrencySelect/>}/>
@@ -33,6 +34,7 @@ function App() {
       <Route path="/recipient-create/:id" element={<FlowRecipientCreate/>}/>
       <Route path="/profile-edit/:id" element={<ProfileEdit/>}/>
       <Route path="/transfer-view/:id" element={<TransferView/>}/>
+      <Route path="/payment/checkout/:id" element={<StripePayment/>}/>
     </Routes>
   )
 }

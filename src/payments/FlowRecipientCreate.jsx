@@ -9,17 +9,25 @@ export const Recipient = () => {
   
   const navigate = useNavigate();
   const [formData, SetFormData] = useState({
-      receive_type: "",
-      full_name: "",
-      phone: "",
-      email: "",
-      city: "",
-      address: "",
-      bank_name: "",
-      bank_account: "",
-      wallet_type: "",
-      wallet_number: ""
-  });
+    receive_type: "",
+    full_name: "",
+    relation_id: "",
+    phone: "",
+    email: "",
+    city: "",
+    address: "",
+    bank_name: "",
+    bank_account: "",
+    wallet_type: "",
+    wallet_number: "",
+    source_country_currency_id: "",
+    target_country_currency_id: "",
+    attributes: {
+        account_type: "",
+        legalType: ""
+    }
+});
+
 
     const [error, setError] = useState({});
 
@@ -71,24 +79,32 @@ export const Recipient = () => {
 
 
   useEffect(()=>{
-     if(!quotation) return;
-     
-     const fetchContry = async ()=>{
-       const token = localStorage.getItem('token');
-        if(!token) return;
-      try{
-        const res = await axios.get(`http://localhost:8000/api/recipients/country/${id}`, {
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setQuotation(res.data.data);
-      } catch(error){
-        console.log('Api not found', error)
-      }
-     }
-     fetchContry();
-  }, [id])
+  const fetchContry = async ()=>{
+    const token = localStorage.getItem('token');
+    if(!token) return;
+
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/recipients/country/${id}`,
+        { headers:{ Authorization: `Bearer ${token}` } }
+      );
+      
+      console.log('Quotation data:', res.data.data);
+
+      setQuotation(res.data.data);
+
+
+    } catch(error){
+      console.log('Api not found', error)
+    }
+  }
+
+  if(id){
+    fetchContry();
+  }
+
+}, [id]);
+
 
   useEffect(()=>{
     if(quotation?.target_currency?.id){
@@ -106,10 +122,12 @@ export const Recipient = () => {
     try{
       const token = localStorage.getItem('token');
       const res = await axios.post('http://localhost:8000/api/recipients/store',
-        {transactionId: id,
+        {
+            ...formData,
+          transactionId: id,
           quotation_id:id,
+          source_country_currency_id: quotation?.source_country_currency_id,
           target_country_currency_id: formData.target_country_currency_id,
-          ...formData
         },
         {
           headers:{
