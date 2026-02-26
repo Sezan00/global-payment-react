@@ -16,6 +16,8 @@ import FlowRecipientCreate  from "./payments/FlowRecipientCreate";
 import ProfileEdit from "./Profile/ProfileEdit";
 import TransferView  from "./payments/TransferView";
 import StripePayment from "./payments/Stripe/StripePayment";
+import MockPayment from "./payments/Stripe/MockPayment";
+import Status from "./Payment Status/Status";
 function App() {
   return (
     <Routes>
@@ -35,6 +37,8 @@ function App() {
       <Route path="/profile-edit/:id" element={<ProfileEdit/>}/>
       <Route path="/transfer-view/:id" element={<TransferView/>}/>
       <Route path="/payment/checkout/:id" element={<StripePayment/>}/>
+      <Route path="/payment/fake/:id" element={<MockPayment/>}/>
+      <Route path="/payment-status" element={<Status/>}/>
     </Routes>
   )
 }

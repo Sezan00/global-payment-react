@@ -23,24 +23,24 @@ export const TransferView = () => {
   }, [id])
 
   //handle submi to data
-   const handleSend = async () => {
-  try {
-    const token = localStorage.getItem('token');
+//    const handleSend = async () => {
+//   try {
+//     const token = localStorage.getItem('token');
 
-    await axios.post(
-      `http://localhost:8000/api/transactions/${id}/send`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-     navigate(`/payment/checkout/${id}`)
-  } catch (err) {
-    alert('Something went wrong');
-  }
-};
+//     await axios.post(
+//       `http://localhost:8000/api/transactions/${id}/send`,
+//       {},
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//      navigate(`/payment/checkout/${id}`)
+//   } catch (err) {
+//     alert('Something went wrong');
+//   }
+// };
 
 
   return (
@@ -176,7 +176,7 @@ export const TransferView = () => {
              </div>
 
              <button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-4 rounded-xl shadow-lg shadow-slate-900/10 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-              onClick={handleSend}
+              onClick={()=>(navigate(`/payment/checkout/${id}`))}
              >
                 <span>Confirm and send</span>
                 <span className="text-slate-400">|</span>
