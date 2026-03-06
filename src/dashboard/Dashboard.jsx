@@ -35,7 +35,7 @@ export const Dashboard = () => {
               Dashboard
             </div>
             <div 
-            onClick={() => navigate("/payment")} 
+            onClick={() => navigate("/currencyselet")} 
             className="px-6 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-r-full cursor-pointer"
             >
               Payments
