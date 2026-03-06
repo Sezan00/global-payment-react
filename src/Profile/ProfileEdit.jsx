@@ -28,7 +28,7 @@ export const ProfileEdit = () => {
         const fetchUserInfo = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get(`http://localhost:8000/api/edit-profile/${id}`, {
+                const res = await axios.get(`https://global-backend.sezan.xyz/api/edit-profile/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setUserInfo(res.data.userinfo);
@@ -44,7 +44,7 @@ export const ProfileEdit = () => {
     const handleSubmit = async () => {
         try{
             const token = localStorage.getItem('token');
-            const res   = await axios.put(`http://localhost:8000/api/update-profile`,
+            const res   = await axios.put(`https://global-backend.sezan.xyz/api/update-profile`,
                 formData,
                 {headers: {Authorization: `Bearer ${token}`}}
             );

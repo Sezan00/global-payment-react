@@ -13,7 +13,7 @@ export const StripePayment = () => {
 
    const token = localStorage.getItem('token');
 
-   return fetch("http://localhost:8000/api/create-checkout-session", {
+   return fetch("https://global-backend.sezan.xyz/api/create-checkout-session", {
      method: "POST",
      headers: {
        "Content-Type": "application/json",

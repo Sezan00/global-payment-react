@@ -10,7 +10,7 @@ export const TransferView = () => {
     const fetchTransactionData = async ()=> {
       try{
         const token = localStorage.getItem('token');
-        const res   = await axios.get(`http://localhost:8000/api/transaction-view/${id}`, {
+        const res   = await axios.get(`https://global-backend.sezan.xyz/api/transaction-view/${id}`, {
           headers: {Authorization:`Bearer ${token}`}
         })
          console.log('Transaction:', res.data.transaction);
@@ -28,7 +28,7 @@ export const TransferView = () => {
 //     const token = localStorage.getItem('token');
 
 //     await axios.post(
-//       `http://localhost:8000/api/transactions/${id}/send`,
+//       `https://global-backend.sezan.xyz/api/transactions/${id}/send`,
 //       {},
 //       {
 //         headers: {

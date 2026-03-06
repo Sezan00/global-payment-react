@@ -42,7 +42,7 @@ export const Recipient = () => {
     const fetchRelation = async () => {
       try{
         const token = localStorage.getItem('token');
-        const res   = await axios.get(`http://localhost:8000/api/relations`, {
+        const res   = await axios.get(`https://global-backend.sezan.xyz/api/relations`, {
           headers: { Authorization: `Bearer ${token}`}
         })
          setRelation(res.data);
@@ -60,7 +60,7 @@ export const Recipient = () => {
 
       const token = localStorage.getItem('token');
       try{
-        const res = await axios.get(`http://localhost:8000/api/country-currencie`,{
+        const res = await axios.get(`https://global-backend.sezan.xyz/api/country-currencie`,{
           headers:{Authorization: `Bearer ${token}`}
         })
          setData(res.data);
@@ -85,7 +85,7 @@ export const Recipient = () => {
 
     try{
       const res = await axios.get(
-        `http://localhost:8000/api/recipients/country/${id}`,
+        `https://global-backend.sezan.xyz/api/recipients/country/${id}`,
         { headers:{ Authorization: `Bearer ${token}` } }
       );
       
@@ -121,7 +121,7 @@ export const Recipient = () => {
 
     try{
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:8000/api/recipients/store',
+      const res = await axios.post('https://global-backend.sezan.xyz/api/recipients/store',
         {
             ...formData,
           transactionId: id,

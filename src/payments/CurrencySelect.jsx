@@ -22,7 +22,7 @@ export default function CurrencyAmount() {
   const getGetAvailableSource = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get('http://localhost:8000/api/available-countries', {
+      const response = await axios.get('https://global-backend.sezan.xyz/api/available-countries', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -55,7 +55,7 @@ export default function CurrencyAmount() {
       const token = localStorage.getItem("token");
         if (!token) return; 
       try{
-        const res = await axios.get(`http://localhost:8000/api/receiver/countries/${receiverCountry}/currencies`, {
+        const res = await axios.get(`https://global-backend.sezan.xyz/api/receiver/countries/${receiverCountry}/currencies`, {
           headers:{
             Authorization: `Bearer ${token}`
           }
@@ -81,7 +81,7 @@ const fetchRate = async () => {
     const token = localStorage.getItem("token");
         if (!token) return; 
     const res = await axios.get(
-      `http://localhost:8000/api/exhange-rate?source=${source.id}&target=${target.id}&amount=${amount}`,
+      `https://global-backend.sezan.xyz/api/exhange-rate?source=${source.id}&target=${target.id}&amount=${amount}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -112,7 +112,7 @@ const fetchRate = async () => {
      try {
         const token = localStorage.getItem('token');
 
-        const res =  await axios.post('http://localhost:8000/api/quotation-store', {
+        const res =  await axios.post('https://global-backend.sezan.xyz/api/quotation-store', {
            source_country_currency_id: source.id,
            target_country_currency_id: target.id,
            amount:amount,

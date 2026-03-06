@@ -19,7 +19,7 @@ export const RecipientList = () => {
     const fetchRecipient = async ()=>{
       try{
         const token = localStorage.getItem('token');
-         const res = await axios.get(`http://localhost:8000/api/recipients-list?quotation_id=${id}`, {
+         const res = await axios.get(`https://global-backend.sezan.xyz/api/recipients-list?quotation_id=${id}`, {
           headers:{
             Authorization: `Bearer ${token}`,
           }
@@ -45,7 +45,7 @@ export const RecipientList = () => {
     const token = localStorage.getItem('token');
 
     const res = await axios.post(
-      'http://localhost:8000/api/trainsaction',
+      'https://global-backend.sezan.xyz/api/trainsaction',
       {
         quotation_id: id,        
         recipient_id: recipient_id

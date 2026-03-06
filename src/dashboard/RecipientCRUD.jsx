@@ -19,7 +19,7 @@ export const RecipientCRUD = () => {
             const fetchRecipient = async ()=>{
             try{
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:8000/api/recipients-show', {
+                const res = await axios.get('https://global-backend.sezan.xyz/api/recipients-show', {
                 headers:{
                     Authorization: `Bearer ${token}`,
                 }
@@ -43,7 +43,7 @@ export const RecipientCRUD = () => {
         const deleteRecipient = async (id) => {
             try{
             const token = localStorage.getItem('token');
-                await axios.delete(`http://localhost:8000/api/recipient/delete/${id}`, {
+                await axios.delete(`https://global-backend.sezan.xyz/api/recipient/delete/${id}`, {
                 headers:{
                     Authorization: `Bearer ${token}`,
                 }

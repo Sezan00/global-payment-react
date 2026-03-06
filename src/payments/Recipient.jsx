@@ -77,7 +77,7 @@ export const Recipient = () => {
   const fetchRelation = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`http://localhost:8000/api/relations`, {
+      const res = await axios.get(`https://global-backend.sezan.xyz/api/relations`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setRelation(res.data);
@@ -94,7 +94,7 @@ export const Recipient = () => {
 
       const token = localStorage.getItem('token');
       try {
-        const res = await axios.get(`http://localhost:8000/api/country-currencie`, {
+        const res = await axios.get(`https://global-backend.sezan.xyz/api/country-currencie`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setData(res.data);
@@ -116,7 +116,7 @@ export const Recipient = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
       try {
-        const res = await axios.get(`http://localhost:8000/api/recipients/country/${id}`, {
+        const res = await axios.get(`https://global-backend.sezan.xyz/api/recipients/country/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -172,7 +172,7 @@ export const Recipient = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:8000/api/recipients/store',
+      const res = await axios.post('https://global-backend.sezan.xyz/api/recipients/store',
         preparePayload(),
         {
           headers: { Authorization: `Bearer ${token}`, },
@@ -191,7 +191,7 @@ export const Recipient = () => {
     const fetchFields = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:8000/api/recipient-fields/${selectedCountryCode}/${selectedCurrencyCode}`, {
+        const res = await axios.get(`https://global-backend.sezan.xyz/api/recipient-fields/${selectedCountryCode}/${selectedCurrencyCode}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setDynamicFields(res.data);
@@ -210,7 +210,7 @@ export const Recipient = () => {
   const fetchCurrency = async () => {
     try{
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/usercurrency', {
+      const response = await axios.get('https://global-backend.sezan.xyz/api/usercurrency', {
         headers: { Authorization: `Bearer ${token}`
       }
     });

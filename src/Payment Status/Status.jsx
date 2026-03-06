@@ -19,7 +19,7 @@ const getSessionData = async () => {
     const token = localStorage.getItem("token");
 
     const res = await axios.get(
-      `http://localhost:8000/api/stripe-session?session_id=${sessionId}`,
+      `https://global-backend.sezan.xyz/api/stripe-session?session_id=${sessionId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`

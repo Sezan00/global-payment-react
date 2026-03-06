@@ -16,7 +16,7 @@ export const ConfrimCur = () => {
         const fetchQuotation = async () => {
             try{
                 const token = localStorage.getItem('token');
-                const res   = await axios.get(`http://localhost:8000/api/confirm-cur/${id}`, {
+                const res   = await axios.get(`https://global-backend.sezan.xyz/api/confirm-cur/${id}`, {
                     headers:{
                          Authorization: `Bearer ${token}`,
                     },
@@ -39,7 +39,7 @@ export const ConfrimCur = () => {
     // const handleRecipient = async () => {
     //   try{
     //     const token = localStorage.getItem('token');
-    //     const res = await axios.post("http://localhost:8000/api/trainsaction", 
+    //     const res = await axios.post("https://global-backend.sezan.xyz/api/trainsaction", 
     //       {quotation_id:id },
     //       {
     //         headers:{

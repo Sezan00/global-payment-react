@@ -5,7 +5,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:8000/api/login", formData, {
+      const res = await axios.post("https://global-backend.sezan.xyz/api/login", formData, {
         withCredentials: true,
       });
       localStorage.setItem("token", res.data.token);

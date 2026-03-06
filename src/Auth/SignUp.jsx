@@ -13,7 +13,7 @@ const SignUp = () => {
   });
 
   useEffect(()=>{
-    axios.get("http://localhost:8000/api/country")
+    axios.get("https://global-backend.sezan.xyz/api/country")
          .then((res)=>setContries(res.data))
          .catch((err)=> console.log(err));
   }, []);
@@ -26,7 +26,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8000/api/register", formData);
+      const res = await axios.post("https://global-backend.sezan.xyz/api/register", formData);
       alert(res.data.message);
     } catch (error) {
       console.error(error.response?.data);

@@ -17,7 +17,7 @@ export const FundAndRealtion = () => {
 
   useEffect(()=>{
     const token = localStorage.getItem('token')
-    axios.get(`http://localhost:8000/api/master-data`, {
+    axios.get(`https://global-backend.sezan.xyz/api/master-data`, {
         headers:{
           Authorization: `Bearer ${token}`
         }
@@ -44,7 +44,7 @@ export const FundAndRealtion = () => {
  const token = localStorage.getItem('token');
     try{
         await axios.put(
-          `http://localhost:8000/api/transaction/extra-info/${id}`,
+          `https://global-backend.sezan.xyz/api/transaction/extra-info/${id}`,
           {
             purpose_of_transfer_id:formData.purpose_of_transfer_id,
             source_of_fund_id:formData.source_of_fund_id,
