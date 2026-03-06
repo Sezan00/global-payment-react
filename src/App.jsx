@@ -18,12 +18,14 @@ import TransferView  from "./payments/TransferView";
 import StripePayment from "./payments/Stripe/StripePayment";
 import MockPayment from "./payments/Stripe/MockPayment";
 import Status from "./Payment Status/Status";
+import Home from "./Profile/Home";
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Home/>}/>
       <Route path="/dashboard/:name" element={<Dashboard />} />
       <Route path="/signup" element={<SignUp/>} />
-      <Route path="login" element={<Login/>}/>
+      <Route path="/login" element={<Login/>}/>
       <Route path="/payment" element={<Payment/>}/> 
       <Route path="/currencyselet" element={<CurrencySelect/>}/>
       <Route path="/confirm-cur/:id" element={<ConfrimCur/>}/>

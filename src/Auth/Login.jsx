@@ -31,7 +31,7 @@ const Login = () => {
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen">
-      <div className="bg-white flex items-center justify-center shadow-lg rounded-2xl p-8 w-full max-w-md">
+      <div className="bg-white flex-col items-center justify-center shadow-lg rounded-2xl p-8 w-full max-w-md">
         <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
@@ -58,6 +58,15 @@ const Login = () => {
             Login
           </button>
         </form>
+
+         <p className='text-center text-sm text-gray-500 mt-6'>
+            Have no account?{" "}
+            <span 
+              onClick={()=> navigate('/signup')}
+            className='text-indigo-600 font-medium cursor-pointer'>
+              Signup
+            </span>
+      </p>
       </div>
     </div>
   );
