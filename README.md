@@ -26,3 +26,7 @@ A modern and responsive global payment web application built with React and Vite
 
 ## 📌 Project Goal
 This project was built to improve frontend architecture skills, state management, API handling, and modern React development practices.
+
+## 🎥 Demo Video
+
+[![Watch Demo](https://img.youtube.com/vi/odTBn4ikMFU/0.jpg)](https://youtu.be/odTBn4ikMFU)
